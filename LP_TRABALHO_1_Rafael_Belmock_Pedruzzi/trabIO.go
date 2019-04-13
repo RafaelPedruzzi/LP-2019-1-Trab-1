@@ -19,54 +19,53 @@ import (
 
 /**
  *	Função para leitura dos arquivos entrada.txt e distancia.txt
- *	parametros: nenhum
- *	retorno: a distância limite e uma slice contendo todos os pontos lidos. Cada ponto é representado em uma slice, sendo que a primeira posição dela contem o número da linha que foi lido e as posições seguintes as cordenadas do ponto em ordem de leitura.
- *
+ *	parâmetros: nenhum.
+ *	retorno: a distância limite e um ponteiro para um mapa contendo todos os pontos lidos mapeados pela linha em que foram lidos.
  */
-func readEntry() (float64, [][]float64) {
-	var dist, i float64 = 0, 1 // dist: distância limite ; i: contador da linha atual de leitura
-	var points [][]float64     // points: slice de pontos
+func readEntry() (float64, *map[int]Point) {
+	var dist float64 = 0          // dist: distância limite.
+	var i int = 1                 // i: contador da linha atual de leitura.
+	points := make(map[int]Point) // points: mapa de pontos.
 
-	// Abrindo arquivo distancia.txt para obter a distância limite
+	// Abrindo arquivo distancia.txt para obter a distância limite.
 	distancia, err := os.Open("./distancia.txt")
 	if err != nil {
 		panic("Error to open file: distancia.txt")
 	}
 	defer distancia.Close()
 
-	fmt.Fscan(distancia, &dist) // lendo distância limite
+	fmt.Fscan(distancia, &dist) // lendo distância limite.
 
-	// Abrindo arquivo entrada.txt para obter os pontos
+	// Abrindo arquivo entrada.txt para obter os pontos.
 	entrada, err := os.Open("./entrada.txt")
 	if err != nil {
 		panic("Error to open file: entrada.txt")
 	}
 	defer entrada.Close()
 
-	fileScanner := bufio.NewScanner(entrada) // scanner do arquivo por linhas
+	fileScanner := bufio.NewScanner(entrada) // scanner do arquivo por linhas.
 
-	// Escaneando cada linha de entrada.txt e armazenando os pontos em points
+	// Escaneando cada linha de entrada.txt e armazenando os pontos em points.
 	for fileScanner.Scan() {
-		var p []float64  // slice auxiliar para armazenar o ponto sendo lido atualmente
-		p = append(p, i) // adicionando o número da linha na primeira posição
-		i += 1
+		var p Point // ponto sendo lido atualmente.
 
-		// Scanner de cada linha por word, ou seja, por strings separadas por espaços
+		// Scanner de cada linha por word, ou seja, por strings separadas por espaços.
 		lineScanner := bufio.NewScanner(strings.NewReader(fileScanner.Text()))
 		lineScanner.Split(bufio.ScanWords)
 
-		// Lendo cada word, convertendo-as para float64 e armazenando em p
+		// Lendo cada word, convertendo-as para float64 e armazenando em p.
 		for lineScanner.Scan() {
-			f, err := strconv.ParseFloat(lineScanner.Text(), 64) // leitura e conversão e uma cordenada
+			f, err := strconv.ParseFloat(lineScanner.Text(), 64) // leitura e conversão de uma cordenada.
 			if err != nil {
 				fmt.Println(err)
 				panic("Error: can't convert string to float64")
 			}
-			p = append(p, f) // adicionando a cordenada ao fim de p
+			p = append(p, f) // adicionando a cordenada a p.
 		}
 
-		points = append(points, p) // adicionando p a lista de pontos
+		points[i] = p // mapeando o número da linha como chave do ponto.
+		i += 1
 	}
 
-	return dist, points
+	return dist, &points
 }

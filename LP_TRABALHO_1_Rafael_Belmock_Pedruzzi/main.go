@@ -11,8 +11,16 @@ package main
 import "fmt"
 
 func main() {
-	dist, points := readEntry()
+	dist, p := readEntry()
+	points := *p
 
 	fmt.Printf("%v %T\n", dist, dist)
-	fmt.Printf("len=%d cap=%d %v\n", len(points), cap(points), points)
+	fmt.Printf("len=%d %v\n", len(points), points)
+	// fmt.Printf("%f\n", points[1].Dist(points[1]))
+	fmt.Printf("%f\n", points[1].Dist(points[3]))
+	fmt.Printf("%f\n", points[3].Dist(points[4]))
+	// fmt.Printf("%f\n", points[1].Dist(points[4]))
+
+	g := makeGroups(dist, p)
+	fmt.Printf("%v\n", g.groups)
 }
