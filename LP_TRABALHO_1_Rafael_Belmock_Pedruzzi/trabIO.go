@@ -30,7 +30,7 @@ func readEntry() (float64, *map[int]Point) {
 	// Abrindo arquivo distancia.txt para obter a distância limite.
 	distancia, err := os.Open("./distancia.txt")
 	if err != nil {
-		panic("Error to open file: distancia.txt")
+		panic(err)
 	}
 	defer distancia.Close()
 
@@ -39,7 +39,7 @@ func readEntry() (float64, *map[int]Point) {
 	// Abrindo arquivo entrada.txt para obter os pontos.
 	entrada, err := os.Open("./entrada.txt")
 	if err != nil {
-		panic("Error to open file: entrada.txt")
+		panic(err)
 	}
 	defer entrada.Close()
 
@@ -68,4 +68,43 @@ func readEntry() (float64, *map[int]Point) {
 	}
 
 	return dist, &points
+}
+
+/**
+ *	Funcão para impressão do arquivo saida.txt
+ *	parâmetros: ponteiro para os grupos a serem impressos
+ *	pós-condição: estruturas inalteradas.
+ */
+func writeGroups(g *Groups) {
+	// Criando arquivo de escrita
+	saida, err := os.Create("saida.txt")
+	if err != nil {
+		panic(err)
+	}
+	defer saida.Close()
+
+	// Imprimindo cada grupo. Somente os identifiicadores são impressos, em ordem cressente e separados por espaços. grupos diferentes são separados por uma linha em branco.
+	for i := 0; i < len(g.groups); i += 1 {
+		for j := 0; j < len(g.groups[i]); j += 1 {
+			fmt.Fprintf(saida, "%d ", g.groups[i][j])
+		}
+		fmt.Fprintf(saida, "\n\n")
+	}
+}
+
+/**
+ *	Funcão para impressão do arquivo result.txt
+ *	parâmetros: valor da SSE do agrupamento.
+ */
+func writeSSE(sse float64) {
+	// Criando arquivo de escrita
+	saida, err := os.Create("result.txt")
+	if err != nil {
+		panic(err)
+	}
+	defer saida.Close()
+
+	// Imprimindo a SSE
+	fmt.Fprintf(saida, "%.4f", sse)
+
 }
