@@ -9,10 +9,7 @@ point.go:	módulo responsável pela implementação dos calculos e
 *******************************************************************/
 package main
 
-import (
-	"fmt"
-	"math"
-)
+import "math"
 
 type Point []float64
 
@@ -50,8 +47,7 @@ func (p1 Point) Dist(p2 Point) float64 {
  */
 func makeGroups(dist float64, p *map[int]Point) *Groups {
 	g := Groups{points: *p} // inicializando g com o ponteiro para o mapa de pontos.
-	// pts := *(g.points)     // mapa de pontos.
-	var lider bool // variável auxiliar usada para reconhecer novos líderes.
+	var lider bool 			// variável auxiliar usada para reconhecer novos líderes.
 
 	// Montando os grupos.
 	// Criando o primeiro grupo e adicionando o primeiro ponto como seu líder.
@@ -59,7 +55,7 @@ func makeGroups(dist float64, p *map[int]Point) *Groups {
 	g.groups[0][0] = 1
 
 	// Adicionando/criando os demais pontos/grupos.
-	for i := 2; i <= len(g.points); i += 1 { // para cada ponto i no mapa de pontos.
+	for i := 2; i <= len(g.points); i += 1 { 	// para cada ponto i no mapa de pontos.
 		for j := 0; j < len(g.groups); j += 1 { // para cada grupo j em g.
 
 			p := g.groups[j][0] // posição do líder do grupo j no mapa.
@@ -125,13 +121,10 @@ func (g Groups) sse() float64 {
 	for i := 0; i < len(g.groups); i += 1 { // para cada grupo i na lista de grupos.
 		cMassa := g.centroMassa(i)
 		groupSum = 0
-		fmt.Printf("\ni= %v\ncMassa= %v\n", i, cMassa)
 
-		for j := 0; j < len(g.groups[i]); j += 1 { // para cada elemento j do grupo i.
+		for j := 0; j < len(g.groups[i]); j += 1 {	   // para cada elemento j do grupo i.
 			d := g.points[g.groups[i][j]].Dist(cMassa) // d = distância entre o ponto j e o centro de massa do grupo.
-			fmt.Printf("d= %v\n", d)
 			groupSum += d * d
-			fmt.Printf("gSum= %v\n", groupSum)
 		}
 
 		sse += groupSum // SSE será a soma de todos os somatórios parciais.
