@@ -85,10 +85,15 @@ func writeGroups(g *Groups) {
 
 	// Imprimindo cada grupo. Somente os identifiicadores são impressos, em ordem cressente e separados por espaços. grupos diferentes são separados por uma linha em branco.
 	for i := 0; i < len(g.groups); i += 1 {
-		for j := 0; j < len(g.groups[i]); j += 1 {
-			fmt.Fprintf(saida, "%d ", g.groups[i][j])
+		if i != 0 {
+			fmt.Fprintf(saida, "\n\n")
 		}
-		fmt.Fprintf(saida, "\n\n")
+		for j := 0; j < len(g.groups[i]); j += 1 {
+			if j != 0 {
+				fmt.Fprintf(saida, " ")
+			}
+			fmt.Fprintf(saida, "%d", g.groups[i][j])
+		}
 	}
 }
 
